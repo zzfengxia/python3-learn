@@ -4,16 +4,13 @@
 import my_fun as fun
 import time
 from collections import Iterable
+import functools
 
 #print(list(fun.spell_check(['ANHS', 'aiUr', 'nglr', 'TshT'])))
 
 #print(fun.prod([1, 2, 3, 5, 6]))
 
 #print(fun.str2float('1232.456'))
-
-
-
-
 
 #print(list(fun.is_palindrome(range(1, 100))))
 
@@ -35,4 +32,6 @@ def aa():
     time.sleep(0.1)
     print("111")
 
-aa()
+int2 = functools.partial(int, base=2)
+print(int2('10011001', base=10))
+

@@ -153,3 +153,11 @@ def metric(fun):
         return result
     return wrapper
 
+# 偏函数，可以创建新的函数
+int2 = functools.partial(int, base=2)
+
+
+
+
+
+
