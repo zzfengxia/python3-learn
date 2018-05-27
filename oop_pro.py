@@ -89,3 +89,9 @@ if __name__ == '__main__':
 
     # 链式调用
     print(DynamicApi().api.user('lisa').registy)
+
+
+
+
+
+

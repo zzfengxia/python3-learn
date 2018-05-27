@@ -56,7 +56,7 @@ class Cat(Animal):
         print('cat is running...')
 
 '''
-“鸭子类型”，一个对象只要“看起来像鸭子，走起路来像鸭子”，那它就可以被看做是鸭子。
+“file-like鸭子类型”，一个对象只要“看起来像鸭子，走起路来像鸭子”，那它就可以被看做是鸭子。
 Car对象有desc方法，那么Car也可以当作是Animal的子类
 '''
 class Car(object):
