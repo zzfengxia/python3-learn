@@ -5,6 +5,8 @@ import time
 import functools
 
 """阶乘"""
+
+
 def factorial(n):
     if n == 1:
         return 1
@@ -13,6 +15,8 @@ def factorial(n):
 
 
 '''递归优化--尾递归'''
+
+
 def fact_iter(n, factor):
     if n == 1:
         return factor
@@ -21,6 +25,8 @@ def fact_iter(n, factor):
 
 
 ''' 递归实现汉诺塔 '''
+
+
 def hanoi_move(n, a, b, c):
     if n == 1:
         print(a, "-->", c)
@@ -28,6 +34,7 @@ def hanoi_move(n, a, b, c):
         hanoi_move(n - 1, a, c, b)
         hanoi_move(1, a, b, c)
         hanoi_move(n - 1, b, a, c)
+
 
 # 使用递归+slice切片实现去除字符串首尾空格的方法
 def trim(s):
@@ -44,9 +51,9 @@ def min_max(L):
     min = L[0]
     max = L[0]
     for n in L:
-        if(n > max):
+        if (n > max):
             max = n
-        if(n < min):
+        if (n < min):
             min = n
     return min, max
 
@@ -79,6 +86,7 @@ def triangles(maxLine):
 
     return 'done'
 
+
 # 优化后的杨辉三角生成器
 def triangles2(maxLine):
     out = [1]
@@ -96,29 +104,32 @@ def ld_fun(x, y, f):
 
 # 使用map函数实现首字母大写，其他小写
 def spell_check(L):
-    return map(lambda s:s[:1].upper() + s[1:].lower(), L)
+    return map(lambda s: s[:1].upper() + s[1:].lower(), L)
 
 
 # 列表求积
 def prod(L):
-    return reduce(lambda x, y:x * y, L)
+    return reduce(lambda x, y: x * y, L)
 
 
 # 字符串转换为浮点数
 def str2float(ss):
-    return reduce(lambda x, y:x + y*pow(10, -len(str(y))), map(int, ss.split('.')))
+    return reduce(lambda x, y: x + y * pow(10, -len(str(y))), map(int, ss.split('.')))
+
 
 # 从3开始的基数生成器
 def cardinal():
-        n = 1
-        while True:
-            n = n + 2
-            yield n
+    n = 1
+    while True:
+        n = n + 2
+        yield n
+
 
 # 素数生成器
 def primes():
     def not_divisible(n):
         return lambda x: x % n > 0
+
     # 第一个为2
     yield 2
     it = cardinal()
@@ -126,6 +137,7 @@ def primes():
         n = next(it)
         yield n
         it = filter(not_divisible(n), it)
+
 
 # 筛选回数，切片的第三个参数为负数时，表示从右至左切片
 def is_palindrome(ite):
@@ -135,10 +147,12 @@ def is_palindrome(ite):
 # 返回计数器函数
 def createCounter():
     n = 0
+
     def count():
         nonlocal n
         n = n + 1
         return n
+
     return count
 
 
@@ -151,13 +165,9 @@ def metric(fun):
         end = int(round(time.time() * 1000))
         print("fun %s executed %s ms" % (fun.__name__, (end - start)))
         return result
+
     return wrapper
+
 
 # 偏函数，可以创建新的函数
 int2 = functools.partial(int, base=2)
-
-
-
-
-
-

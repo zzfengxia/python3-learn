@@ -4,17 +4,41 @@
 from io import StringIO
 from io import BytesIO
 import os
+import pickle
+import json
+
+
+class User(object):
+    def __init__(self, username, email, nick):
+        self._username = username
+        self._email = email
+        self._nick = nick
+
 
 # 搜索文件名包含指定关键字的文件
-def find_file(dir, name):
-    fl = os.listdir(dir)
+
+
+def find_file(d, name):
+    fl = os.listdir(d)
     for f in fl:
-        fname = os.path.join(dir, f)
+        fname = os.path.join(d, f)
         if os.path.isdir(f):
             find_file(f, name)
         elif os.path.isfile(f):
             if name in f:
                 print(fname)
+
+
+def cls2dict(obj):
+    return obj.__dict__
+
+
+def dict2cls(dic):
+    return User(dic['_username'], dic['_email'], dic['_nick'])
+
+
+def dict2cls2(dic):
+    return User(dic['_username'], dic['_email'], dic['_nick'])
 
 
 if __name__ == '__main__':
@@ -54,3 +78,21 @@ if __name__ == '__main__':
     print('过滤当前目录下所有.py文件：', [x for x in os.listdir('.') if os.path.isfile(x) and os.path.splitext(x)[1]=='.py'])
 
     find_file('D:\\workspaces\\python3\\python3-learn', 'oop')
+
+    # 序列化与反序列化
+    user = dict(name="Tom", color="black", age=10)
+    print("序列化:", pickle.dumps(user))
+    # 写入文件
+    with open('a.temp', 'wb') as sf:
+        pickle.dump(user, sf)
+
+    with open('a.temp', 'rb') as rf:
+        print("反序列化:", pickle.load(rf))
+
+    # JSON转换
+    jerry = User('Jerry', '1234@gmail.com', '小老鼠')
+    print("对象转json:", json.dumps(jerry, default=cls2dict, ensure_ascii=False))
+
+    jsonstr = '{"_username": "Tom", "_email": "5678@gmail.com", "_nick": "小黑猫"}'
+    tom = json.loads(jsonstr, object_hook=dict2cls)
+    print("json转对象：", tom._nick)
