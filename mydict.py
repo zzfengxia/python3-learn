@@ -1,7 +1,8 @@
 # coding: utf-8
 
+
 class MyDict(dict):
-    '''
+    """
     Simple dict but also support access as x.y style.
 
     >>> d1 = MyDict()
@@ -22,7 +23,8 @@ class MyDict(dict):
     Traceback (most recent call last):
         ...
     AttributeError: 'Dict' object has no attribute 'empty'
-    '''
+    """
+
     def __init__(self, **kv):
         super().__init__(**kv)
 
@@ -30,15 +32,15 @@ class MyDict(dict):
         return self[k]
 
     def __setattr__(self, k, v):
-       self[k] = v
+        self[k] = v
+
 
 if __name__ == '__main__':
     # 文档测试
     import doctest
+
     doctest.testmod()
 
     mydict = MyDict(name='francis', age=25)
     print(mydict['name'])
     print(mydict.age)
-
-

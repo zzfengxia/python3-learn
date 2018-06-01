@@ -1,8 +1,35 @@
 #!usr/bin/env python3
 # coding= "utf-8"
 
-import time
 import functools
+import random
+import time
+
+
+def desc(name, age=25):
+    print("name:%s, age:%s" % (name, age))
+
+
+def join(*lt, separate=","):
+    length = (len(lt)) - 1
+
+    i = 0
+    result = ""
+    for o in lt:
+        if i == length:
+            result = result + o
+        else:
+            result = result + o + separate
+        i += 1
+
+    print(result)
+
+
+def get_random(x):
+    rx = random.randint(0, 10)
+
+    return rx, rx * x
+
 
 """阶乘"""
 
