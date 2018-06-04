@@ -6,6 +6,7 @@
 __author__ = 'Francis.zz'
 
 import os, time, random, subprocess
+from threading import Thread, Lock
 from multiprocessing import Process, Pool, Queue
 
 
@@ -39,9 +40,25 @@ def read(q):
         print('Get %s from queue.' % value)
 
 
+balance = 0
+
+
+def write_fun():
+    global balance
+    lock = Lock()
+    for i in range(1000):
+        # 同步锁
+        lock.acquire()
+        try:
+            balance += 1
+            # balance -= 1
+        finally:
+            lock.release()
+
+
 if __name__ == '__main__':
-    # MULTI_PROCESS, SUB_PROCESS, PROCESS_COMMUNICATE
-    unit = 'SUB_PROCESS'
+    # MULTI_PROCESS, SUB_PROCESS, PROCESS_COMMUNICATE, THREAD
+    unit = 'THREAD'
 
     if unit == 'MULTI_PROCESS':
         print('CPU数量:', os.cpu_count())
@@ -74,6 +91,16 @@ if __name__ == '__main__':
         pool.join()
         print("all sub process done")
 
+        # 进程会拷贝一份数据到自己内存,只能用Queue,Pipes同步数据
+        pp1 = Process(target=write_fun)
+        pp2 = Process(target=write_fun)
+        pp1.start()
+        pp2.start()
+
+        pp1.join()
+        pp2.join()
+        print('最终结果:', balance)
+
     elif unit == 'SUB_PROCESS':
         # 创建子进程，并控制其输入输出
         print('$ ping baidu.com')
@@ -83,8 +110,8 @@ if __name__ == '__main__':
 
         subp = subprocess.Popen(['ping', 'baidu.com'], stdin=subprocess.PIPE, stdout=subprocess.PIPE)
         # 解决中文乱码问题
-        #subp.wait()
-        #print(subp.stdout.read().decode('gbk'))
+        # subp.wait()
+        # print(subp.stdout.read().decode('gbk'))
         output, err = subp.communicate()
         print(output.decode('gbk'))
         print('Exit code:', subp.returncode)
@@ -109,3 +136,15 @@ if __name__ == '__main__':
         rp.terminate()
 
         print('process done.')
+
+    elif unit == 'THREAD':
+        # 线程之间可以共享数据。CPython解释器使用了GIL导致多线程只能在一个CPU内执行
+        t1 = Thread(target=write_fun, name='t1')
+        t2 = Thread(target=write_fun, name='t2')
+        t1.start()
+        t2.start()
+
+        t1.join()
+        t2.join()
+
+        print('最终结果:', balance)

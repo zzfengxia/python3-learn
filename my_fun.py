@@ -2,6 +2,7 @@
 # coding= "utf-8"
 
 import functools
+from functools import reduce
 import random
 import time
 
