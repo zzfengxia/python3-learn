@@ -39,6 +39,29 @@ def read(q):
         print('Get %s from queue.' % value)
 
 
+def ping_exe(host):
+    # 创建子进程，并控制其输入输出
+    print('$ ping', host)
+    # 中文乱码
+    # r = subprocess.call(['ping', 'baidu.com'], **dict(encoding='gbk'))
+    # print('Exit code:', r)
+
+    subp = subprocess.Popen(['ping', host], stdin=subprocess.PIPE, stdout=subprocess.PIPE)
+    # 解决中文乱码问题
+    # subp.wait()
+    # print(subp.stdout.read().decode('gbk'))
+
+    # 按行输出(实时输出)
+    flag = False
+    while not flag:
+        line = subp.stdout.readline()
+        if line:
+            print(line.decode('gbk'))
+        else:
+            flag = True
+    print('Exit code:', subp.returncode)
+
+
 if __name__ == '__main__':
     # MULTI_PROCESS, SUB_PROCESS, PROCESS_COMMUNICATE
     unit = 'SUB_PROCESS'
@@ -75,19 +98,7 @@ if __name__ == '__main__':
         print("all sub process done")
 
     elif unit == 'SUB_PROCESS':
-        # 创建子进程，并控制其输入输出
-        print('$ ping baidu.com')
-        # 中文乱码
-        # r = subprocess.call(['ping', 'baidu.com'], **dict(encoding='gbk'))
-        # print('Exit code:', r)
-
-        subp = subprocess.Popen(['ping', 'baidu.com'], stdin=subprocess.PIPE, stdout=subprocess.PIPE)
-        # 解决中文乱码问题
-        #subp.wait()
-        #print(subp.stdout.read().decode('gbk'))
-        output, err = subp.communicate()
-        print(output.decode('gbk'))
-        print('Exit code:', subp.returncode)
+        ping_exe('baidu.com')
 
         print('\n$ nslookup')
         p = subprocess.Popen(['nslookup'], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
