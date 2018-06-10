@@ -1,17 +1,17 @@
 #!/usr/bin/env python3
 # coding=utf-8
 
-'''计算BMI指数;体重/身高(m)^2'''
+"""计算BMI指数;体重/身高(m)^2"""
 
 
-def cala_bmi(height, weight, *, name="Francis", age=25, **kv):
+def cala_bmi(height, weight, name="Francis", age=25, **kv):
     print("额外参数：", kv)
     h = float(height)
     w = float(weight)
     expont = w / (h * h)
     # 优化成lamda表达式？
     result = ''
-    if(expont > 32):
+    if expont > 32:
         result = '严重肥胖'
     elif expont > 28:
         result = '肥胖'

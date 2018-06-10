@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 # coding:utf-8
 
-import my_fun as fun
-import time
-from collections import Iterable
 import functools
+import time
+
+import my_fun as fun
 
 
 def desc(*args, name=None, **kw):
