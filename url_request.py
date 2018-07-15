@@ -8,7 +8,7 @@ from urllib import request
 
 import requests
 from bs4 import BeautifulSoup
-
+import chardet
 
 def do_get():
     """
@@ -71,11 +71,17 @@ def do_handler():
     pass
 
 
-if __name__ == '__main__':
-    # GET, POST, HANDLER
-    main = 'POST'
+def use_chardet():
+    print(chardet.detect(b"nihao"))
+    data = '最新の主要ニュース'.encode('euc-jp')
+    print(chardet.detect(data))
 
-    exe = dict(GET=do_get, POST=do_post, HANDLER=do_handler)
+
+if __name__ == '__main__':
+    # GET, POST, HANDLER, CHARDET
+    main = 'CHARDET'
+
+    exe = dict(GET=do_get, POST=do_post, HANDLER=do_handler, CHARDET=use_chardet)
 
     exe[main].__call__()
 
