@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# coding  : utf-8
+# *_*coding=utf-8
 # @author : Francis.zz
 # @date   : 2018-06-03 12:06
 # @desc   : python正则表达式

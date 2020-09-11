@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
-# coding  : utf-8
+# *_*coding=utf-8
 # @author : Francis.zz
 # @date   : 2018-06-02 21:19
 # @desc   : 分布式进程-任务执行器
 
-import time, sys, queue
+import queue
+import time
 from multiprocessing.managers import BaseManager
 
 

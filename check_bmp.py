@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# coding  : utf-8
+# *_*coding=utf-8
 # @author : Francis.zz
 # @date   : 2018-06-04 22:44
 # @desc   : 检查是否是位图文件
@@ -20,23 +20,23 @@ BMP格式采用小端方式存储数据，文件头(前30个字节)的结构按�
 import struct
 
 
-def check(fName):
-    with open(fName, 'rb') as f:
+def check(f_name):
+    with open(f_name, 'rb') as f:
         # 读取文件前30个字节
         data = f.read(30)
         if len(data) < 30:
-            print('%s not a bmp file' % fName)
+            print('%s not a bmp file' % f_name)
             return False
         info = struct.unpack('<ccIIIIIIHH', data)
         if info[0] == b'B' and info[1] == b'M':
-            print('%s is a bmp file' % fName)
+            print('%s is a bmp file' % f_name)
             return {
                 'width': info[-4],
                 'height': info[-3],
                 'color': info[-1]
             }
         else:
-            print('%s not a bmp file, flag:%s' % (fName, info[:2]))
+            print('%s not a bmp file, flag:%s' % (f_name, info[:2]))
 
 
 if __name__ == '__main__':

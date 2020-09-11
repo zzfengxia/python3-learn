@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
-# coding  : utf-8
+# *_*coding=utf-8
 # @author : Francis.zz
 # @date   : 2018-06-02 21:18
 # @desc   : 分布式进程-任务分发器
 
-import random, time, queue
+import queue
+import random
 from multiprocessing.managers import BaseManager
 
 # 发送任务的队列:
