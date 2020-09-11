@@ -24,9 +24,6 @@ if __name__ == "__main__":
     # 对字符串切片，即截取字符串
     # print("ABCDEFG"[2:])
 
-
-    print(fun.trim(" 你好   ") == "你好")
-
     # 迭代
     # print(isinstance('abc', Iterable))
     # for s in "ABCD":
@@ -65,6 +62,10 @@ if __name__ == "__main__":
     # t = fun.triangles2(10)
     # for l in t:
     #     print(l)
+
+    # 模板字符串
+    name = 'Francis'
+    print(f'Hello, {name}')
 
     # NAMETUPLE, DEQUE, DEFAULT_DICT, ORDERED_DICT, COUNTER
     main = 'COUNTER'
