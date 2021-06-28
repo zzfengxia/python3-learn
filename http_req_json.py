@@ -9,9 +9,10 @@ import urllib.request as req_lib
 
 get_id_url = 'http://172.16.80.127:5601/api/saved_objects/?type=index-pattern&per_page=10000'
 delete_index_url = 'http://172.16.80.127:5601/api/saved_objects/index-pattern/'
+kibana_version = '6.2.4'
 
 req = req_lib.Request(get_id_url)
-req.add_header('kbn-version', '6.2.4')
+req.add_header('kbn-version', kibana_version)
 req.add_header('User-Agent', 'python_script')
 res = req_lib.urlopen(req)
 
@@ -22,7 +23,7 @@ for objs in saved_objects:
     index_id = (objs['id'])
     print("开始删除index pattern id:", index_id)
     delete_req = req_lib.Request(delete_index_url + index_id)
-    delete_req.add_header('kbn-version', '6.2.4')
+    delete_req.add_header('kbn-version', kibana_version)
     delete_req.add_header('User-Agent', 'python_script')
     delete_req.get_method = lambda: 'DELETE'
     try:
