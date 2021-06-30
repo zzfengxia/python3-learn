@@ -8,7 +8,7 @@ __author__ = 'Francis.zz'
 import os, time, random, subprocess
 from threading import Thread, Lock
 from multiprocessing import Process, Pool, Queue
-
+from concurrent.futures import ThreadPoolExecutor
 
 def proc_run(name):
     print('child process %s (%s)' % (name, os.getpid()))
@@ -78,6 +78,12 @@ def ping_exe(host):
             flag = True
     print('Exit code:', subp.returncode)
 
+    
+# 调用cmd命令的任务函数
+def call_api(filename):
+    cmd_str = f'Call xx.exe -o {filename} -r "xx.py"'
+    print(cmd_str)
+    time.sleep(2)
 
 if __name__ == '__main__':
     # MULTI_PROCESS, SUB_PROCESS, PROCESS_COMMUNICATE
@@ -159,3 +165,15 @@ if __name__ == '__main__':
         t2.join()
 
         print('最终结果:', balance)
+     
+    # 开启线程池，参数可以指定线程的数量
+    pool = ThreadPoolExecutor(5)
+
+    # 遍历文件目录
+    g = os.walk('D:\python_code\config1')
+    for root, ds, fs in g:
+        for f in fs:
+            # 遍历文件
+            full_path = os.path.join(root, f)
+            pool.submit(call_api, full_path)
+
