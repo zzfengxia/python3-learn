@@ -177,3 +177,4 @@ if __name__ == '__main__':
             full_path = os.path.join(root, f)
             pool.submit(call_api, full_path)
 
+    pool.shutdown(wait=True)

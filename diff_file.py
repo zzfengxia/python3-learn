@@ -9,7 +9,7 @@ import sys
 import os
 import difflib
 import argparse
-
+import csv
 
 # 读取文件
 def read_file(file_name, encoding='uft-8'):
@@ -126,13 +126,22 @@ if __name__ == "__main__":
     else:
         print(f'请指定比对模式, -f or -s')
         exit(-1)
-    with open(out_file, 'w') as f:
-        f.write(f'基准文件目录: {file_dir1}\n')
+    # with open(out_file, 'w') as f:
+    #     f.write(f'基准文件目录: {file_dir1}\n')
+    #     for match_file in match:
+    #         f.write(f'{match_file:<{100}}:  true \n')
+    #     for mis_file in mismatch:
+    #         f.write(f'{mis_file:<{100}}:  false \n')
+    #     for erro_file in errors:
+    #         f.write(f'{erro_file:<{100}}:  无同名文件或比对失败 \n')
+    with open(out_file, 'w') as csvfile:
+        spamwriter = csv.writer(csvfile)
+        spamwriter.writerow(['文件名', '是否一样'])
         for match_file in match:
-            f.write(f'{match_file:<{100}}:  true \n')
+            spamwriter.writerow([match_file, 'True'])
         for mis_file in mismatch:
-            f.write(f'{mis_file:<{100}}:  false \n')
+            spamwriter.writerow([mis_file, 'False'])
         for erro_file in errors:
-            f.write(f'{erro_file:<{100}}:  无同名文件或比对失败 \n')
+            spamwriter.writerow([erro_file, '无同名文件或比对失败'])
     print(f'比对结束，结果已输出至 {out_file} 文件')
     exit(0)
