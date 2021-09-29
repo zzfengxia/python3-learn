@@ -117,8 +117,8 @@ def get_room_near_wall(wall, w):
 
 
 if __name__ == "__main__":
-    width = 31
-    height = 21
+    width = 51
+    height = 31
 
     # 迷宫地图，二维数组
     maze_map = [[0 for i in range(width)] for j in range(height)]
