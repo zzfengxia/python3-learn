@@ -4,7 +4,11 @@ import os, time
 import operator
 from itertools import combinations, permutations
 
-
+"""
+@author: Francis.zz
+@date: 2023-05-10
+@desc: 获取双色球历史开奖信息
+"""
 class DoubleColorBall(object):
     def __init__(self):
         self.baseUrl = 'http://tubiao.zhcw.com/tubiao/ssqNew/ssqJsp/ssqZongHeFengBuTuAsc.jsp'
@@ -108,4 +112,4 @@ class DoubleColorBall(object):
 
 if __name__ == '__main__':
     ball = DoubleColorBall()
-    ball.upt_data()
+    ball.get_all()
