@@ -112,4 +112,4 @@ class DoubleColorBall(object):
 
 if __name__ == '__main__':
     ball = DoubleColorBall()
-    ball.get_all()
+    ball.upt_data()
