@@ -1,9 +1,8 @@
 import warnings
 
-import tushare as ts
-import pandas as pd
-from pandas import DataFrame
 import baostock as bs
+import tushare as ts
+from pandas import DataFrame
 
 
 class StockQuotesWrap(object):
@@ -19,11 +18,19 @@ class StockQuotesWrap(object):
         df['pre_close'] = df['pre_close'].astype(float)
         # 计算涨跌幅
         df['涨跌幅'] = (df['price'] - df['pre_close']) / df['pre_close'] * 100
-        look_col = df[['name', 'price', 'high', 'low', '涨跌幅']]
+        df['涨跌幅'] = df['涨跌幅'].map(lambda x: '%.2f' % x).astype(float)
+        # 截取指定列
+        look_col = df[['name', 'price', 'high', 'low', '涨跌幅', 'b1_p', 'b1_v', 'a1_p', 'a1_v']]
         # 列格式化, inplace=True覆盖当前列信息
         look_col = look_col.rename(columns={'name': '名称', 'price': '当前价格', 'high': '最高', 'low': '最低'})
 
-        print(look_col)
+        # 格式化输出
+        # index: 指定是否包含行索引，默认为 True；
+        # justify: 指定数据对齐方式，默认为 'right'，表示右对齐。你可以将其设置为 'left' 或 'center'，实现左对齐或居中对齐。
+        print(look_col.to_string(index=False, justify='left'))
+
+    def change_format(self, x):
+        x = '%.2f' % x
 
     # 根据名称获取股票代码
     def search_code_by_name(self, name):
@@ -37,14 +44,16 @@ DataFrame
 """
 #df = ts.get_today_all()
 
-
 if __name__ == '__main__':
     # 忽略指定警告信息
     warnings.filterwarnings("ignore", category=FutureWarning)
     quotesWrap = StockQuotesWrap()
-    #quotesWrap.search_code_by_name('凯淳')
-    quotesWrap.get_realtime_quotes(('301001', '300086'))
+    #quotesWrap.search_code_by_name('医药指数')
+    quotesWrap.get_realtime_quotes(('sh000001', 'sz399001', 'sz399006',
+                                    '301001', '300086', '300570', '300403', '300814', '300147', '002468', '600502'))
 
-# bs.login()
-# data = bs.query_stock_basic("sz.300086")
-# print(data.get_data())
+    # bs.login()
+    # data = bs.query_stock_basic("sz.300086")
+    # print(data.get_data())
+
+
