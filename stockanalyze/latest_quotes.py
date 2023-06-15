@@ -2,6 +2,7 @@ import warnings
 
 import baostock as bs
 import tushare as ts
+import qstock as qs
 from pandas import DataFrame
 
 
@@ -48,12 +49,18 @@ if __name__ == '__main__':
     # 忽略指定警告信息
     warnings.filterwarnings("ignore", category=FutureWarning)
     quotesWrap = StockQuotesWrap()
-    #quotesWrap.search_code_by_name('医药指数')
+    #quotesWrap.search_code_by_name('德联')
     quotesWrap.get_realtime_quotes(('sh000001', 'sz399001', 'sz399006',
-                                    '301001', '300086', '300570', '300403', '300814', '300147', '002468', '600502'))
+                                    '301001', '300086', '300814', '300147', '002468', '600502', '300644', '002666'))
 
     # bs.login()
     # data = bs.query_stock_basic("sz.300086")
     # print(data.get_data())
+    #news = qs.limit_pool()
+    #df=qs.ths_money('概念',n=5)
+    #print(df.to_string())
+
+    # 可以获取所有
+    #qs.market_realtime()
 
 

@@ -45,8 +45,13 @@ class DoubleColorBall(object):
                 data = self.bs.find_all(class_='hgt')
                 self.save_ball(self.parse_ball(data))
 
-    # 解析页面信息
     def parse_ball(self, data):
+        """
+        解析页面信息
+        return数据格式：
+        期数 日期 红球6个 蓝球1个
+        23056 2023-05-18 8 14 15 18 23 33 8
+        """
         lotteryData = {}
         for row in data:
             if not isinstance(row, bs4.element.Tag):
@@ -54,6 +59,7 @@ class DoubleColorBall(object):
             tag = row.find(class_="qh7").string.strip()
             if tag.startswith("模拟"):
                 break
+            print(row)
             # 获取a标签的title属性值，<a title="开奖日期：2022-01-01"></a>
             lotteryDate = row.find(class_="qh7").a['title'].strip().replace('开奖日期：', '')
             redBalls = row.find_all(class_="redqiu")
@@ -63,8 +69,8 @@ class DoubleColorBall(object):
 
     def save_ball(self, data):
         with open(self.dataFile, 'a+') as f:
-            for r in sorted(data, reverse=False):  #升序，最新的数据写在文件最后
-            # for r in sorted(data, reverse=True):  #降序
+            for r in sorted(data, reverse=False):  # 升序，最新的数据写在文件最后
+                # for r in sorted(data, reverse=True):  #降序
                 f.write(str(r) + ' ' + ' '.join(data[r]) + '\n')
 
     # 从数据文件中加载最新10条数据
