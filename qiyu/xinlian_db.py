@@ -28,7 +28,7 @@ newlink_pf_db_name_sql = """
     FROM
         information_schema.`SCHEMATA` t 
     WHERE
-        SUBSTR( t.`SCHEMA_NAME`, 1, 10 ) = 'newlink_pf'
+        SUBSTR( t.`SCHEMA_NAME`, 1, 10 ) = 'ai_center'
 """
 
 
@@ -128,7 +128,6 @@ def print_result(result_set):
     print()
 
 
-
 def select(sql, db_list):
     """
     查询
@@ -163,19 +162,18 @@ def update(sql, db_list):
 
 
 db_config = 'D:\\qiyu-work\\mysql_connect_conf.yaml'
-#prefix = 'newlink_uat'
-prefix = 'local'
+prefix = 'newlink_uat'
+#prefix = 'local'
 
 if __name__ == '__main__':
     query_sql = """
-        select * from le_live_report_custom_field t where t.id = 44;
+        
             """
     # upt_sql = "update le_live_report_custom_field set field_desc = '在统计时间内，新增关注数-取消关注数' where field_code = 'sph_fans_add_num'"
     upt_sql = """
-        INSERT INTO `le_live_report_custom_field` (`plat_form`, `custom_group_id`, `field_name`, `field_code`, `front_field_code`, `export_field_code`, `aff_business`, `is_show`, `field_desc`, `seq`, `create_user`, `create_user_name`, `update_user`, `update_user_name`, `store_id`, `tenant_id`) VALUES (4, 13, '发布笔记数', 'xhs_video_num', 'xhsVideoNum', 'xhs_video_num', 6, 0, '笔记发布时间在统计时间内的笔记数', 61300, 0, 'System', 0, 'System', NULL, 0);
-        INSERT INTO `le_live_report_custom_field` (`plat_form`, `custom_group_id`, `field_name`, `field_code`, `front_field_code`, `export_field_code`, `aff_business`, `is_show`, `field_desc`, `seq`, `create_user`, `create_user_name`, `update_user`, `update_user_name`, `store_id`, `tenant_id`) VALUES (7, 16, '发布视频数', 'sph_video_num', 'sphVideoNum', 'sph_video_num', 3, 0, '视频发布时间在统计时间内的笔记数', 31600, 0, 'System', 0, 'System', NULL, 0);
-     """
+            update le_live_report_custom_field set is_deleted = 0 where aff_business = 5;
+            """
     # newlink_db_name_sql
     db_list = get_db_list(newlink_db_name_sql)
-    update(upt_sql, db_list)
-    #select(query_sql, db_list)
+    #update(upt_sql, db_list)
+    select(query_sql, db_list)

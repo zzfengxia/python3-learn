@@ -12,9 +12,10 @@ class ApiTableToEntity(object):
 
     # 转为包装类型，首字母大写
     def __to_type(self, ori):
-        if ori:
+        if ori and '(' in ori:
             ori = ori[:ori.index('(')]
             return ori[0].upper() + ori[1:]
+        return ori
 
     def __deal_var_name(self, ori_str):
         return ori_str
@@ -28,31 +29,32 @@ class ApiTableToEntity(object):
 
         data = []
         ori_line_size = 0
-        with open(self.file_name, 'r') as file:
-            reader = csv.reader(file, delimiter='|')
-            for line in reader:
-                if not line or not line[0].strip():
+        with open(self.file_name, 'r', encoding='utf-8') as file:
+            for line in file.readlines():
+                if not line or line == '':
                     continue
                 ori_line_size += 1
-                line = [cell.strip() for cell in line[1:-1]]
-                if len(line) != max_size:
+
+                line = line.strip("|").strip().strip("|")
+                col_data = line.split("|")
+                if len(col_data) != max_size:
                     print(f"解析失败的行：{line}")
                     continue
-                data.append(line)
+                data.append(list(map(str.strip, col_data)))
 
         parse_size = 0
         for i in range(len(data)):
             if i < skit_line:
                 continue
-            line_data = data[i]
-            var_name = self.__deal_var_name(line_data[var_index])
+            col_data = data[i]
+            var_name = self.__deal_var_name(col_data[var_index])
             print("/**")
             for remark in remarks:
-                remark_str = remark.assembly_msg(line_data)
+                remark_str = remark.assembly_remark(col_data)
                 if remark_str:
                     print(f"* {remark_str}")
             print("*/")
-            print(f"private {self.__to_type(line_data[type_index])} {var_name};")
+            print(f"private {self.__to_type(col_data[type_index])} {var_name};")
             print()
             parse_size += 1
 
@@ -64,9 +66,9 @@ class Remark:
         self.index = index
         self.prefix = prefix
 
-    def assembly_msg(self, line):
-        if len(line) >= self.index:
-            value = line[self.index]
+    def assembly_remark(self, col_data):
+        if len(col_data) >= self.index:
+            value = col_data[self.index]
             if value:
                 return f"{self.prefix}{value}" if self.prefix else value
         return None
@@ -76,11 +78,15 @@ if __name__ == '__main__':
     # 参数
     """
     1：跳过行数
-    2：变量名索引
+    2：变量名索引，变量名所在位置
     3：类型索引
     4：备注索引，可以是个数组
     5: 数据行使用“|”切分的数量
     """
-    params = [2, 1, 3, [Remark(0, None), Remark(2, "是否必填："), Remark(5, "描述："), Remark(3, "长度：")], 6]
-    tool = ApiTableToEntity("D:\\qiyu-work\\文档\\UNIT网站功能API文档-20210621.pdf")
+    params = [2,
+              1,
+              3,
+              [Remark(0, None), Remark(2, "是否必填："), Remark(5, "描述："), Remark(3, "长度：")],
+              6]
+    tool = ApiTableToEntity("D:\\qiyu-work\\wechatapi.md")
     tool.parse_data(params)

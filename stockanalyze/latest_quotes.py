@@ -5,7 +5,6 @@ import tushare as ts
 import qstock as qs
 from pandas import DataFrame
 
-
 class StockQuotesWrap(object):
     def __init__(self):
         print()
@@ -49,9 +48,19 @@ if __name__ == '__main__':
     # 忽略指定警告信息
     warnings.filterwarnings("ignore", category=FutureWarning)
     quotesWrap = StockQuotesWrap()
-    #quotesWrap.search_code_by_name('德联')
-    quotesWrap.get_realtime_quotes(('sh000001', 'sz399001', 'sz399006',
-                                    '301001', '300086', '300814', '300147', '002468', '600502', '300644', '002666'))
+    #quotesWrap.search_code_by_name('青木')
+    quotesWrap.get_realtime_quotes((
+                                    '300785', '300086', '300147', '002468', '600502',
+                                    '300644', '002666', '301001', '301110', '300703',
+
+                                    'sh000001', 'sz399001', 'sz399006',
+
+    ))
+
+    #ts.set_token("087f32845ee8ad6dada139a193978dcb55d8a6fd18441a23aa9d242b")
+    #pro = ts.pro_api()
+    #pro.query()
+    #ts.get_day_all()
 
     # bs.login()
     # data = bs.query_stock_basic("sz.300086")
@@ -61,6 +70,9 @@ if __name__ == '__main__':
     #print(df.to_string())
 
     # 可以获取所有
-    #qs.market_realtime()
+    # df = qs.market_realtime()
+    # print(f'总数量：{len(df)}')
+    # print()
+    # print(df.to_string())
 
 
