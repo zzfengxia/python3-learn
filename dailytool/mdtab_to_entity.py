@@ -15,7 +15,7 @@ class ApiTableToEntity(object):
         if ori and '(' in ori:
             ori = ori[:ori.index('(')]
             return ori[0].upper() + ori[1:]
-        return ori
+        return ori[0].upper() + ori[1:]
 
     def __deal_var_name(self, ori_str):
         return ori_str
@@ -84,9 +84,9 @@ if __name__ == '__main__':
     5: 数据行使用“|”切分的数量
     """
     params = [2,
-              1,
-              3,
-              [Remark(0, None), Remark(2, "是否必填："), Remark(5, "描述："), Remark(3, "长度：")],
-              6]
-    tool = ApiTableToEntity("D:\\qiyu-work\\wechatapi.md")
+              0,
+              2,
+              [Remark(0, None), Remark(1, "是否必填："), Remark(4, "描述："), Remark(3, "长度：")],
+              5]
+    tool = ApiTableToEntity("D:\\qiyu-work\\llma.md")
     tool.parse_data(params)
