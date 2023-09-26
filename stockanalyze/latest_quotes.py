@@ -4,6 +4,7 @@ import baostock as bs
 import tushare as ts
 import qstock as qs
 from pandas import DataFrame
+import datacollect as dc
 
 class StockQuotesWrap(object):
     def __init__(self):
@@ -38,6 +39,33 @@ class StockQuotesWrap(object):
         res = bs.query_stock_basic(code_name=name)
         print(res.get_data())
 
+    def daily_review(self, date):
+        ts.set_token("087f32845ee8ad6dada139a193978dcb55d8a6fd18441a23aa9d242b")
+        pro = ts.pro_api()
+        # 获取当前交易日的股票数据
+        today = pro.daily(trade_date=date)
+
+        # 获取当前交易日涨停的股票
+        today_up_limit = today[today['pct_change'].apply(lambda x: x >= 9.95)]
+
+        # 获取当前交易日跌停的股票
+        today_down_limit = today[today['pct_change'].apply(lambda x: x <= -9.95)]
+
+        # 获取当前交易日连涨天数大于等于3天的股票
+        today_continue_up = today[today['pct_change'].apply(lambda x: x >= 0)]['ts_code'].value_counts()[3:]
+
+        # 输出结果
+        print('涨幅居前：')
+        print(today_up_limit[['ts_code', 'trade_date', 'close', 'pct_change']])
+        print('跌幅居前：')
+        print(today_down_limit[['ts_code', 'trade_date', 'close', 'pct_change']])
+        print('连涨天数大于等于3天：')
+        print(today_continue_up)
+
+    def news(self):
+        df: DataFrame = dc.get_latest_news(top=10)
+        print(df)
+
 """
 DataFrame
 属性：代码，名称，涨跌幅，现价，开盘价，最高价，最低价，最日收盘价，成交量，换手率，成交额，市盈率，市净率，总市值，流通市值
@@ -46,19 +74,20 @@ DataFrame
 
 if __name__ == '__main__':
     # 忽略指定警告信息
-    warnings.filterwarnings("ignore", category=FutureWarning)
+    # warnings.filterwarnings("ignore", category=FutureWarning)
     quotesWrap = StockQuotesWrap()
-    #quotesWrap.search_code_by_name('青木')
-    quotesWrap.get_realtime_quotes((
-                                    '300785', '300086', '300147', '002468', '600502',
-                                    '300644', '002666', '301001', '301110', '300703',
+    # #quotesWrap.search_code_by_name('')
+    # quotesWrap.get_realtime_quotes((
+    #                                 '300785', '300147', '002468', '600502', '300086',
+    #                                 '300644', '002666', '301001', '301110', '600228',
+    #                                 '000799', '603000', '300814', '300624',
+    #                                 'sh000001', 'sz399001', 'sz399006',
+    #
+    # ))
 
-                                    'sh000001', 'sz399001', 'sz399006',
+    quotesWrap.news()
+    #quotesWrap.daily_review('20230926')
 
-    ))
-
-    #ts.set_token("087f32845ee8ad6dada139a193978dcb55d8a6fd18441a23aa9d242b")
-    #pro = ts.pro_api()
     #pro.query()
     #ts.get_day_all()
 

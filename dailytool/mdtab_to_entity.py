@@ -20,7 +20,7 @@ class ApiTableToEntity(object):
     def __deal_var_name(self, ori_str):
         return ori_str
 
-    def parse_data(self, params):
+    def parse_data(self, params, version=None):
         skit_line = params[0]
         var_index = params[1]
         type_index = params[2]
@@ -53,6 +53,8 @@ class ApiTableToEntity(object):
                 remark_str = remark.assembly_remark(col_data)
                 if remark_str:
                     print(f"* {remark_str}")
+            if version:
+                print(f"* @since v{version}")
             print("*/")
             print(f"private {self.__to_type(col_data[type_index])} {var_name};")
             print()
@@ -81,7 +83,7 @@ if __name__ == '__main__':
     2：变量名索引，变量名所在位置
     3：类型索引
     4：备注索引，可以是个数组
-    5: 数据行使用“|”切分的数量
+    5: 数据行使用“|”切分的数量 
     """
     params = [2,
               0,
@@ -89,4 +91,6 @@ if __name__ == '__main__':
               [Remark(0, None), Remark(1, "是否必填："), Remark(4, "描述："), Remark(3, "长度：")],
               5]
     tool = ApiTableToEntity("D:\\qiyu-work\\llma.md")
-    tool.parse_data(params)
+    tool.parse_data(params, '3.10')
+    # for i in range(500, 1230):
+    #     print(i, ",", sep='', end='')

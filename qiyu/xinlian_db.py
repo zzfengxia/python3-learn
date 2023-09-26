@@ -163,17 +163,28 @@ def update(sql, db_list):
 
 db_config = 'D:\\qiyu-work\\mysql_connect_conf.yaml'
 prefix = 'newlink_uat'
-#prefix = 'local'
+# prefix = 'local'
+
+def bubble_sort(arr):
+    n = len(arr)
+    for i in range(n - 1):
+        for j in range(n - i - 1):
+            if arr[j] > arr[j + 1]:
+                arr[j], arr[j + 1] = arr[j + 1], arr[j]
+    return arr  # 测试代码 arr = [64, 34, 25, 12, 22, 11, 90] sorted_arr = bubble_sort(arr) print(sorted_arr)
 
 if __name__ == '__main__':
-    query_sql = """
-        
-            """
-    # upt_sql = "update le_live_report_custom_field set field_desc = '在统计时间内，新增关注数-取消关注数' where field_code = 'sph_fans_add_num'"
-    upt_sql = """
-            update le_live_report_custom_field set is_deleted = 0 where aff_business = 5;
-            """
-    # newlink_db_name_sql
-    db_list = get_db_list(newlink_db_name_sql)
-    #update(upt_sql, db_list)
-    select(query_sql, db_list)
+    # query_sql = """
+    #
+    #         """
+    # # upt_sql = "update le_live_report_custom_field set field_desc = '在统计时间内，新增关注数-取消关注数' where field_code = 'sph_fans_add_num'"
+    # upt_sql = """
+    #         update le_live_report_custom_field set is_deleted = 0 where aff_business = 5;
+    #         """
+    # # newlink_db_name_sql
+    # db_list = get_db_list(newlink_db_name_sql)
+    # # update(upt_sql, db_list)
+    # select(query_sql, db_list)
+    arr = [5, 4, 1, 2]
+    sort = bubble_sort(arr)
+    print(sort)
