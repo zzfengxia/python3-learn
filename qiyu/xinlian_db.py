@@ -174,17 +174,14 @@ def bubble_sort(arr):
     return arr  # 测试代码 arr = [64, 34, 25, 12, 22, 11, 90] sorted_arr = bubble_sort(arr) print(sorted_arr)
 
 if __name__ == '__main__':
-    # query_sql = """
+    query_sql = """
     #
     #         """
     # # upt_sql = "update le_live_report_custom_field set field_desc = '在统计时间内，新增关注数-取消关注数' where field_code = 'sph_fans_add_num'"
     # upt_sql = """
-    #         update le_live_report_custom_field set is_deleted = 0 where aff_business = 5;
-    #         """
-    # # newlink_db_name_sql
+    #          ALTER TABLE `dy_account` ADD COLUMN `ai_marketing_status` tinyint(1) NULL COMMENT 'AI营销状态 1:生效中 9:已过期' AFTER `residue_ai_speech`,ADD COLUMN `ai_marketing_start_time` datetime NULL COMMENT 'AI营销生效日期' AFTER `ai_marketing_status`,ADD COLUMN `ai_marketing_end_time` datetime NULL COMMENT 'AI营销到期日期' AFTER `ai_marketing_start_time`
+    #          """
+    # # # newlink_db_name_sql
     # db_list = get_db_list(newlink_db_name_sql)
-    # # update(upt_sql, db_list)
+    # update(upt_sql, db_list)
     # select(query_sql, db_list)
-    arr = [5, 4, 1, 2]
-    sort = bubble_sort(arr)
-    print(sort)

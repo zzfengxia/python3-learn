@@ -1,15 +1,16 @@
 #!/usr/bin/env python3
 # *_*coding=utf-8
-# @author : Francis.zz
-# @date   : 2023-09-26 15:21
-# @desc   : crawl_news.py
-
+"""
+@author : Francis.zz
+@date   : 2023-10-30 16:43
+@desc   : get_news_sina.py
+"""
 
 import json
 import re
 import traceback
 from datetime import datetime
-
+from datacollect.collect_news.crawl_interface import AbstractCrawlData
 import lxml.html
 import pandas as pd
 from lxml import etree
@@ -22,6 +23,14 @@ try:
 except ImportError:
     # python3无法使用urllib2
     from urllib2 import urlopen, Request
+
+
+class CrawlDataSina(AbstractCrawlData):
+    def __init__(self):
+        self.source_name = 'Sina'
+
+    def get_news(self, top=None, plate=None, show_content=False) -> pd.DataFrame:
+        return get_latest_news(top, plate, show_content)
 
 def get_latest_news(top=None, plate=None, show_content=False):
     """
@@ -224,11 +233,3 @@ def _guba_content(url):
 def _random():
     import random
     return str(random.random())
-
-
-if __name__ == '__main__':
-    main = ''
-
-    exe = dict()
-
-    exe[main].__call__()

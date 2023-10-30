@@ -14,8 +14,8 @@ INDEX_LABELS = ['sh', 'sz', 'hs300', 'sz50', 'cyb', 'zxb', 'zx300', 'zh500']
 INDEX_LIST = {'sh': 'sh000001', 'sz': 'sz399001', 'hs300': 'sh000300',
               'sz50': 'sh000016', 'zxb': 'sz399005', 'cyb': 'sz399006',
               'zx300': 'sz399008', 'zh500': 'sh000905'}
-P_TYPE = {'http': 'http://', 'ftp': 'ftp://'}
-PAGE_NUM = [40, 60, 80, 100]
+P_TYPE = {'http': 'http://', 'ftp': 'ftp://', 'https': 'https://'}
+PAGE_NUM = [20, 40, 60, 80, 100]
 FORMAT = lambda x: '%.2f' % x
 FORMAT4 = lambda x: '%.4f' % x
 DOMAINS = {'sina': 'sina.com.cn', 'sinahq': 'sinajs.cn',

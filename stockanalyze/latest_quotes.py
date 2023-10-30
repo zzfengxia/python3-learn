@@ -21,9 +21,9 @@ class StockQuotesWrap(object):
         df['涨跌幅'] = (df['price'] - df['pre_close']) / df['pre_close'] * 100
         df['涨跌幅'] = df['涨跌幅'].map(lambda x: '%.2f' % x).astype(float)
         # 截取指定列
-        look_col = df[['name', 'price', 'high', 'low', '涨跌幅', 'b1_p', 'b1_v', 'a1_p', 'a1_v']]
+        look_col = df[['code', 'name', 'price', 'high', 'low', '涨跌幅', 'b1_p', 'b1_v', 'a1_p', 'a1_v']]
         # 列格式化, inplace=True覆盖当前列信息
-        look_col = look_col.rename(columns={'name': '名称', 'price': '当前价格', 'high': '最高', 'low': '最低'})
+        look_col = look_col.rename(columns={'code': '代码', 'name': '名称', 'price': '当前价格', 'high': '最高', 'low': '最低'})
 
         # 格式化输出
         # index: 指定是否包含行索引，默认为 True；
@@ -76,16 +76,17 @@ if __name__ == '__main__':
     # 忽略指定警告信息
     # warnings.filterwarnings("ignore", category=FutureWarning)
     quotesWrap = StockQuotesWrap()
-    # #quotesWrap.search_code_by_name('')
-    # quotesWrap.get_realtime_quotes((
-    #                                 '300785', '300147', '002468', '600502', '300086',
-    #                                 '300644', '002666', '301001', '301110', '600228',
-    #                                 '000799', '603000', '300814', '300624',
-    #                                 'sh000001', 'sz399001', 'sz399006',
-    #
-    # ))
+    #quotesWrap.search_code_by_name('')
+    quotesWrap.get_realtime_quotes((
+                                    '300147', '600502', '300086', '603160', '002236',
+                                    '300644', '002666', '301001', '301110', '300785',
+                                    '603000', '300814', '300624', '600228', '000799',
+                                    '002812',  '002542', '301131', '002468',
+                                    'sh000001', 'sz399001', 'sz399006',
 
-    quotesWrap.news()
+    ))
+
+    #quotesWrap.news()
     #quotesWrap.daily_review('20230926')
 
     #pro.query()
