@@ -10,7 +10,7 @@ import json
 import re
 import traceback
 from datetime import datetime
-from datacollect.collect_news.crawl_interface import AbstractCrawlData
+from datacollect.collect_news.crawl_interface import AbstractNewsCrawlData
 import lxml.html
 import pandas as pd
 from lxml import etree
@@ -25,12 +25,17 @@ except ImportError:
     from urllib2 import urlopen, Request
 
 
-class CrawlDataSina(AbstractCrawlData):
+class NewsCrawlDataSina(AbstractNewsCrawlData):
     def __init__(self):
         self.source_name = 'Sina'
 
-    def get_news(self, top=None, plate=None, show_content=False) -> pd.DataFrame:
+    def get_latest_news(self, top=None, plate=None, show_content=False) -> pd.DataFrame:
         return get_latest_news(top, plate, show_content)
+
+    def get_hot_news(self, top_n=None, plate=None) -> pd.DataFrame:
+        self.source_name = '微博热搜'
+        return get_hot_news(top_n, plate)
+
 
 def get_latest_news(top=None, plate=None, show_content=False):
     """
@@ -44,7 +49,6 @@ def get_latest_news(top=None, plate=None, show_content=False):
     Return
     --------
         DataFrame
-            classify :新闻类别
             title :新闻标题
             time :发布时间
             url :新闻链接
@@ -72,8 +76,8 @@ def get_latest_news(top=None, plate=None, show_content=False):
         for r in desired_property:
             ctime = datetime.fromtimestamp(int(r['ctime']))
             intime = datetime.fromtimestamp(int(r['intime']))
-            #rtstr = datetime.strftime(rt, "%m-%d %H:%M")
-            #arow = [r['title'], r['intro'], ctime, intime, r['url']]
+            # rtstr = datetime.strftime(rt, "%m-%d %H:%M")
+            # arow = [r['title'], r['intro'], ctime, intime, r['url']]
             arow = [ctime, intime, r['title'], r['url']]
             if show_content:
                 arow.append(latest_content(r['url']))
@@ -81,7 +85,7 @@ def get_latest_news(top=None, plate=None, show_content=False):
         df = pd.DataFrame(data, columns=nv.LATEST_COLS_C if show_content else nv.LATEST_COLS)
         return df
     except Exception as er:
-        #print(str(er))
+        # print(str(er))
         stack_trace = traceback.format_exc()  # 获取堆栈跟踪信息并保存到字符串
         print(stack_trace)  # 现在您可以按需要打印或处理堆栈跟踪信息
 
@@ -98,16 +102,65 @@ def latest_content(url):
         string:返回新闻的文字内容
     '''
     try:
-        html = lxml.html.parse(url)
+        request = Request(url, headers=nv.DEFAULT_HEADERS)
+        response = urlopen(request, timeout=10).read()
+        html = lxml.html.fromstring(response)
         res = html.xpath('//div[@id=\"artibody\"]/p')
         if ct.PY3:
             sarr = [etree.tostring(node).decode('utf-8') for node in res]
         else:
             sarr = [etree.tostring(node) for node in res]
-        sarr = ''.join(sarr).replace('&#12288;', '')#.replace('\n\n', '\n').
+        sarr = ''.join(sarr).replace('&#12288;', '')  # .replace('\n\n', '\n').
         html_content = lxml.html.fromstring(sarr)
         content = html_content.text_content()
         return content
+    except Exception as er:
+        print(str(er))
+
+
+def get_hot_news(top_n=None, plate=None):
+    '''
+        获取即时热搜
+    Parameter
+    --------
+        top_n: 指定条数
+        plate: 板块
+    Return
+    --------
+        DataFrame
+            rank:       排名
+            keywords :  热搜关键词
+            tag:        标签
+            heat:       热值
+            url :       链接
+    '''
+    top_n = nv.MAX_HOT_NUM if top_n is None else top_n
+    top_n = nv.MAX_HOT_NUM if top_n > nv.MAX_HOT_NUM else top_n
+    plate = 'all' if plate is None else plate
+    req_path = nv.HOT_NEWS_URL['sina'] % nv.SINA_HOT_TYPE[plate]
+    print(req_path)
+    try:
+        request = Request(req_path, headers=nv.DEFAULT_HEADERS)
+        response = urlopen(request, timeout=10).read()
+        html = lxml.html.fromstring(response)
+        tr_list = html.xpath('//div[@id="pl_top_realtimehot"]/table/tbody/tr')
+        data = []
+        for tr in tr_list:
+            rank = get_one(tr.xpath('.//td[contains(@class, "ranktop")]/text()'))
+            if not rank or rank == '•':
+                continue
+            keywords = get_one(tr.xpath('.//td[@class="td-02"]/a/text()'))
+            tag = get_one(tr.xpath('.//td[@class="td-03"]/i/text()'))
+            heat = get_one(tr.xpath('.//td[@class="td-02"]/span/text()'))
+            url = get_one(tr.xpath('.//td[@class="td-02"]/a/@href'))
+            if url:
+                url = 'https://' + nv.DEFAULT_HEADERS['Host'] + url
+            arow = [rank, keywords, tag, heat, url]
+            data.append(arow)
+            if len(data) >= top_n:
+                break
+        df = pd.DataFrame(data, columns=nv.HOT_NEWS_COLS)
+        return df
     except Exception as er:
         print(str(er))
 
@@ -131,9 +184,9 @@ def get_notices(code=None, date=None):
     if code is None:
         return None
     symbol = 'sh' + code if code[:1] == '6' else 'sz' + code
-    url = nv.NOTICE_INFO_URL%(ct.P_TYPE['http'], ct.DOMAINS['vsf'],
-                              ct.PAGES['ntinfo'], symbol)
-    url = url if date is None else '%s&gg_date=%s'%(url, date)
+    url = nv.NOTICE_INFO_URL % (ct.P_TYPE['http'], ct.DOMAINS['vsf'],
+                                ct.PAGES['ntinfo'], symbol)
+    url = url if date is None else '%s&gg_date=%s' % (url, date)
     html = lxml.html.parse(url)
     res = html.xpath('//table[@class=\"body_table\"]/tbody/tr')
     data = []
@@ -141,7 +194,7 @@ def get_notices(code=None, date=None):
         title = td.xpath('th/a/text()')[0]
         type = td.xpath('td[1]/text()')[0]
         date = td.xpath('td[2]/text()')[0]
-        url = '%s%s%s'%(ct.P_TYPE['http'], ct.DOMAINS['vsf'], td.xpath('th/a/@href')[0])
+        url = '%s%s%s' % (ct.P_TYPE['http'], ct.DOMAINS['vsf'], td.xpath('th/a/@href')[0])
         data.append([title, type, date, url])
     df = pd.DataFrame(data, columns=nv.NOTICE_INFO_CLS)
     return df
@@ -184,8 +237,8 @@ def guba_sina(show_content=False):
 
     from pandas.io.common import urlopen
     try:
-        with urlopen(nv.GUBA_SINA_URL%(ct.P_TYPE['http'],
-                                       ct.DOMAINS['sina'])) as resp:
+        with urlopen(nv.GUBA_SINA_URL % (ct.P_TYPE['http'],
+                                         ct.DOMAINS['sina'])) as resp:
             lines = resp.read()
         html = lxml.html.document_fromstring(lines)
         res = html.xpath('//ul[@class=\"list_05\"]/li[not (@class)]')
@@ -218,7 +271,7 @@ def _guba_content(url):
             sarr = [etree.tostring(node).decode('utf-8') for node in res]
         else:
             sarr = [etree.tostring(node) for node in res]
-        sarr = ''.join(sarr).replace('&#12288;', '')#.replace('\n\n', '\n').
+        sarr = ''.join(sarr).replace('&#12288;', '')  # .replace('\n\n', '\n').
         html_content = lxml.html.fromstring(sarr)
         content = html_content.text_content()
         ptime = html.xpath('//div[@class=\"fl_left iltp_time\"]/span/text()')[0]
@@ -233,3 +286,14 @@ def _guba_content(url):
 def _random():
     import random
     return str(random.random())
+
+
+def get_one(values: tuple):
+    return values[0] if values else ''
+
+
+if __name__ == '__main__':
+    # print(datacollect.get_latest_news(top=10, plate='stock').to_string(index=False, justify='left'))
+    content = latest_content(
+        'https://finance.sina.com.cn/stock/hkstock/marketalerts/2023-10-31/doc-imzsyitu3135701.shtml')
+    print(content)
