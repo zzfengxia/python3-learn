@@ -2,13 +2,16 @@
 # *_*coding=utf-8
 """
 @author : Francis.zz
-@date   : 2023-10-30 15:34
-@desc   : get_news_all.py
+@date   : 2023-11-10 15:30
+@desc   : get_stock_all.py
 """
 
 import inspect
 import sys
-from datacollect.collect_news.get_news_sina import *
+import os
+import importlib
+from datacollect.collect_news.crawl_interface import AbstractStockCrawlData
+from datacollect.collect_news.get_stock_eastmoney import *
 
 
 def get_subclasses(protocol_class):
@@ -26,8 +29,7 @@ def get_subclasses2(interface_class):
     :return:
     """
     implementations = []
-    module = interface_class.__module__
-    for name, obj in inspect.getmembers(sys.modules[module]):
+    for name, obj in inspect.getmembers(sys.modules[interface_class.__module__]):
         if inspect.isclass(obj) and issubclass(obj, interface_class) and obj != interface_class:
             implementations.append(obj)
     return implementations
@@ -35,22 +37,20 @@ def get_subclasses2(interface_class):
 
 def process_news_data(method):
     def decorator(*args, **kwargs):
-        all_subclasses = get_subclasses(AbstractNewsCrawlData)
+        all_subclasses = get_subclasses(AbstractStockCrawlData)
         for subclass in all_subclasses:
             instance = subclass()
-            if isinstance(instance, AbstractNewsCrawlData):
+            if isinstance(instance, AbstractStockCrawlData):
                 df = method(instance, *args, **kwargs)
                 if df is not None:
+                    print()
+                    print()
                     print(f'数据来源：{instance.source_name}')
                     print(df.to_string(index=False, justify='left'))
+
     return decorator
 
 
 @process_news_data
-def get_latest_news(instance, top=None, plate=None, show_content=False):
-    return instance.get_latest_news(top, plate, show_content)
-
-
-@process_news_data
-def get_hot_news(instance, top=None, plate=None):
-    return instance.get_hot_news(top, plate)
+def get_guba_comments(instance, stock_code, top_n=None, order_type=None):
+    return instance.get_guba_comments(stock_code, top_n, order_type)

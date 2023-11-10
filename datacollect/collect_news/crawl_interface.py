@@ -66,3 +66,21 @@ class AbstractStockCrawlData(Protocol):
         :return:
         """
         pass
+
+    def get_hot_stocks(self, top_n=None) -> DataFrame:
+        """
+        获取当前最新热搜
+        :param top_n:           前N只热度排名最前的股票
+        :return:
+        """
+        pass
+
+    def get_guba_comments(self, stock_code, top_n=None, order_type=None) -> DataFrame:
+        """
+        获取当前最新热搜
+        :param stock_code:      股票代码
+        :param top_n:           前N条评论
+        :param order_type:      排序方式，最新、最热
+        :return:
+        """
+        pass

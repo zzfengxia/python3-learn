@@ -6,4 +6,3 @@
 @desc   : __init__.py.py
 """
 
-from datacollect.collect_news.get_news_all import (get_latest_news, get_hot_news)

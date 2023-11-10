@@ -17,6 +17,7 @@ from lxml import etree
 
 from datacollect import cons as ct
 from datacollect import news_vars as nv
+from datacollect.util import common_util as cu
 
 try:
     from urllib.request import urlopen, Request
@@ -102,7 +103,7 @@ def latest_content(url):
         string:返回新闻的文字内容
     '''
     try:
-        request = Request(url, headers=nv.DEFAULT_HEADERS)
+        request = Request(url, headers=nv.DEFAULT_SINA_HEADERS)
         response = urlopen(request, timeout=10).read()
         html = lxml.html.fromstring(response)
         res = html.xpath('//div[@id=\"artibody\"]/p')
@@ -138,23 +139,22 @@ def get_hot_news(top_n=None, plate=None):
     top_n = nv.MAX_HOT_NUM if top_n > nv.MAX_HOT_NUM else top_n
     plate = 'all' if plate is None else plate
     req_path = nv.HOT_NEWS_URL['sina'] % nv.SINA_HOT_TYPE[plate]
-    print(req_path)
     try:
-        request = Request(req_path, headers=nv.DEFAULT_HEADERS)
+        request = Request(req_path, headers=nv.DEFAULT_SINA_HEADERS)
         response = urlopen(request, timeout=10).read()
         html = lxml.html.fromstring(response)
         tr_list = html.xpath('//div[@id="pl_top_realtimehot"]/table/tbody/tr')
         data = []
         for tr in tr_list:
-            rank = get_one(tr.xpath('.//td[contains(@class, "ranktop")]/text()'))
+            rank = cu.get_one(tr.xpath('.//td[contains(@class, "ranktop")]/text()'))
             if not rank or rank == '•':
                 continue
-            keywords = get_one(tr.xpath('.//td[@class="td-02"]/a/text()'))
-            tag = get_one(tr.xpath('.//td[@class="td-03"]/i/text()'))
-            heat = get_one(tr.xpath('.//td[@class="td-02"]/span/text()'))
-            url = get_one(tr.xpath('.//td[@class="td-02"]/a/@href'))
+            keywords = cu.get_one(tr.xpath('.//td[@class="td-02"]/a/text()'))
+            tag = cu.get_one(tr.xpath('.//td[@class="td-03"]/i/text()'))
+            heat = cu.get_one(tr.xpath('.//td[@class="td-02"]/span/text()'))
+            url = cu.get_one(tr.xpath('.//td[@class="td-02"]/a/@href'))
             if url:
-                url = 'https://' + nv.DEFAULT_HEADERS['Host'] + url
+                url = 'https://' + nv.DEFAULT_SINA_HEADERS['Host'] + url
             arow = [rank, keywords, tag, heat, url]
             data.append(arow)
             if len(data) >= top_n:
@@ -286,10 +286,6 @@ def _guba_content(url):
 def _random():
     import random
     return str(random.random())
-
-
-def get_one(values: tuple):
-    return values[0] if values else ''
 
 
 if __name__ == '__main__':

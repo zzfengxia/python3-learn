@@ -7,13 +7,13 @@
 """
 
 import datacollect
-import datacollect.collect_news as cn
 
 
 if __name__ == '__main__':
     #print(datacollect.get_latest_news(top=10, plate='stock').to_string(index=False, justify='left'))
-    #cn.get_latest_news(top=10, plate='stock')
-    cn.get_hot_news()
+    #datacollect.get_latest_news(top=10, plate='stock')
+    # datacollect.get_hot_news(top=10)
+    datacollect.get_guba_comments('300785', top_n=20)
 
 
 
