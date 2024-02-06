@@ -64,7 +64,8 @@ class StockCrawlDataEast(AbstractStockCrawlData):
 
 
 headers = {
-    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.102 Safari/537.36'}
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.102 Safari/537.36'
+}
 
 
 def get_comments_from_script(stock_code, top_n=None, order_type=None):
@@ -76,6 +77,7 @@ def get_comments_from_script(stock_code, top_n=None, order_type=None):
         while len(data) < top_n:
             # 带“,f”的是最新发帖
             url = nv.GUBA_COMMENT['eastmoney'][order_type] % (stock_code, cur_page)
+            print(url)
             response = requests.get(url, headers=nv.DEFAULT_HEADERS)
             html = lxml.html.fromstring(response.text)
             script_tags = html.xpath("//html/body/script")
@@ -98,7 +100,7 @@ def get_comments_from_script(stock_code, top_n=None, order_type=None):
                     # 打印 article_list 的值
                     for comment in comment_list:
                         title = comment['post_title']
-                        author = comment['user_nickname']
+                        author = comment['user_nickname'] if 'user_nickname' in comment else ''
                         time = comment['post_publish_time']
                         reply_num = comment['post_comment_count']
                         read_num = comment['post_click_count']
@@ -111,6 +113,40 @@ def get_comments_from_script(stock_code, top_n=None, order_type=None):
         return df
     except Exception as e:
         print(f"Error: {e}")
+
+
+def get_overview(stock_code):
+    """
+    获取即时热度排名
+
+    :param stock_code:
+    :return:
+    """
+    from urllib.parse import quote
+    import re
+    import json
+
+    headers_cp = headers.copy()
+    headers_cp['Content-Type'] = 'application/json'
+
+    data = '{"appKey":"","client":"wap","method":"qgqm","args":{"fundId":"","hkFundId":"","uid":"","customerId":"","custid":"","pageId":"Stock_quotes_page","positions":"Stock_quotes_page_gbxf_text","stockCodeWithoutMarket":"'+stock_code+'","marketCode":0}}'
+    encode_data = quote(data)
+
+    url = f'https://eminterservice.securities.eastmoney.com/api/data/companyinfo?data={encode_data}&t={_random()}'
+    response = requests.get(url, headers=headers_cp)
+    res = response.text
+    if not res:
+        return None
+    # 使用正则表达式提取目标值
+    match = re.search(r'\[highlight\](\d+)\[/highlight\]', json.loads(res)['data']['rankInfo']['title'])
+
+    # 如果找到匹配，获取匹配的第一个分组值
+    rank_value = match.group(1) if match else None
+    return rank_value
+
+def _random():
+    import random
+    return str(random.random())
 
 
 def get_comments_from_body(stock_code, date=None, top_n=None, type=None):
@@ -163,5 +199,10 @@ if __name__ == '__main__':
     #             # 打印 article_list 的值
     #             for comment in article_list['re']:
     #                 print(comment['post_title'])
-    df = get_comments_from_script('301131', top_n=52)
-    print(df.to_string(col_space=20, index=False, justify='left'))
+    #df = get_comments_from_script('301131', top_n=52)
+    #print(df.to_string(col_space=20, index=False, justify='left'))
+
+    rank_value = get_overview('300785')
+
+    # 打印结果
+    print(rank_value)

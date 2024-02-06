@@ -7,13 +7,19 @@
 """
 
 import datacollect
+import akshare as ak
 
 
 if __name__ == '__main__':
+    #res = ak.stock_zt_pool_em(date='20231116')
+    #res.to_excel("C:\\Users\\86153\\Desktop\\20231116.xlsx")
     #print(datacollect.get_latest_news(top=10, plate='stock').to_string(index=False, justify='left'))
     #datacollect.get_latest_news(top=10, plate='stock')
     # datacollect.get_hot_news(top=10)
-    datacollect.get_guba_comments('300785', top_n=20)
+    str = input("输入代码：")
+    res = datacollect.get_guba_comments(str, top_n=40)
+    #res = ak.stock_hot_rank_em()
+    print(res.to_string(col_space=20, index=False, justify='left'))
 
 
 

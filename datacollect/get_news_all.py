@@ -5,7 +5,7 @@
 @date   : 2023-10-30 15:34
 @desc   : get_news_all.py
 """
-
+import functools
 import inspect
 import sys
 import os
@@ -52,6 +52,7 @@ def get_subclasses2(interface_class):
 
 
 def process_news_data(method):
+    @functools.wraps(method) # 保留原始函数的元信息
     def decorator(*args, **kwargs):
         all_subclasses = get_subclasses(AbstractNewsCrawlData)
         for subclass in all_subclasses:

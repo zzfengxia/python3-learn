@@ -6,6 +6,7 @@
 @desc   : get_stock_all.py
 """
 
+import functools
 import inspect
 import sys
 import os
@@ -36,6 +37,7 @@ def get_subclasses2(interface_class):
 
 
 def process_news_data(method):
+    @functools.wraps(method)
     def decorator(*args, **kwargs):
         all_subclasses = get_subclasses(AbstractStockCrawlData)
         for subclass in all_subclasses:
@@ -46,7 +48,8 @@ def process_news_data(method):
                     print()
                     print()
                     print(f'数据来源：{instance.source_name}')
-                    print(df.to_string(index=False, justify='left'))
+                    #print(df.to_string(index=False, justify='left'))
+                return df
 
     return decorator
 

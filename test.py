@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 # coding: utf-8
 
+import logging
 # 使用python -m pdb test.py开启单步调试
 from functools import reduce
-import logging
+from typing import Any
 
 # 设置输出级别
 logging.basicConfig(level=logging.INFO)
@@ -20,11 +21,33 @@ def calc(exp):
     return reduce(lambda acc, x: acc + x, ns)
 
 
-def main():
-    r = calc('100 + 200 + 345')
-    print('100 + 200 + 345 =', r)
-    r = calc('99 + 88 + 8')
-    print('99 + 88 + 8 =', r)
+class SetOnceMappingMixin:
+    def __init__(self, **kwargs: Any) -> None:
+        super().__init__(**kwargs)
+        self._lc_kwargs = kwargs
+
+    """自定义混入类"""
+    __slots__ = ()
+
+    def __setitem__(self, key, value):
+        if key in self:
+            raise KeyError(str(key) + ' already set')
+        return super().__setitem__(key, value)
 
 
-main()
+class SetOnceDict(SetOnceMappingMixin, dict):
+    """自定义字典"""
+    pass
+
+
+if __name__ == '__main__':
+    print(chr(8888))
+    # my_dict= SetOnceDict()
+    # try:
+    #     my_dict['username'] = 'jackfrued'
+    #     my_dict['username'] = 'hellokitty'
+    # except KeyError:
+    #     pass
+    # print(my_dict)
+    # a = SetOnceDict(name='Tom')
+    # print(a.get_name())
