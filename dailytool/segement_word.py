@@ -29,10 +29,7 @@ def seg_sentence(sentence):
     return outstr
 
 if __name__ == '__main__':
-    #print(jieba.lcut('预算30万能买什么车'))
-    # 分词加上tag
-    #print(jieba.posseg.lcut('预算30万能买什么车'))
-    #print(seg_sentence('预算30万能买什么车'))
+    import json
 
-    # 分词加上tag
-    print(jieba.posseg.lcut('槟果是卖完了吗'))
+    str = "问:你的手机号。 答:13570800165"
+    print(str[11:22])

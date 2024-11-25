@@ -85,12 +85,12 @@ if __name__ == '__main__':
     4：备注索引，可以是个数组
     5: 数据行使用“|”切分的数量 
     """
-    params = [2,
+    params = [1,
               0,
               2,
-              [Remark(0, None), Remark(1, "是否必填："), Remark(4, "描述："), Remark(3, "长度：")],
+              [Remark(0, None), Remark(1, "是否必填："), Remark(4, "描述：")],
               5]
-    tool = ApiTableToEntity("D:\\qiyu-work\\llma.md")
-    tool.parse_data(params, '3.10')
+    tool = ApiTableToEntity("C:\\Users\\86153\\Desktop\\11.md")
+    tool.parse_data(params, '3.30')
     # for i in range(500, 1230):
     #     print(i, ",", sep='', end='')

@@ -17,7 +17,8 @@ if __name__ == '__main__':
     #datacollect.get_latest_news(top=10, plate='stock')
     # datacollect.get_hot_news(top=10)
     str = input("输入代码：")
-    res = datacollect.get_guba_comments(str, top_n=40)
+    code = "sh000001" if str == "1" else str
+    res = datacollect.get_guba_comments(code, top_n=40)
     #res = ak.stock_hot_rank_em()
     print(res.to_string(col_space=20, index=False, justify='left'))
 

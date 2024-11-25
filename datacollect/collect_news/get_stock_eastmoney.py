@@ -69,6 +69,8 @@ headers = {
 
 
 def get_comments_from_script(stock_code, top_n=None, order_type=None):
+    import traceback
+
     data = []
     cur_page = 1
     order_type = 'latest' if order_type is None else order_type
@@ -99,6 +101,8 @@ def get_comments_from_script(stock_code, top_n=None, order_type=None):
                     comment_list = article_list['re']
                     # 打印 article_list 的值
                     for comment in comment_list:
+                        if 'post_title' not in comment:
+                            continue
                         title = comment['post_title']
                         author = comment['user_nickname'] if 'user_nickname' in comment else ''
                         time = comment['post_publish_time']
@@ -112,7 +116,8 @@ def get_comments_from_script(stock_code, top_n=None, order_type=None):
         df = pd.DataFrame(data[-top_n:], columns=['time', 'title', 'author', 'reply_num', 'read_num', 'url'])
         return df
     except Exception as e:
-        print(f"Error: {e}")
+        print("Error:")
+        traceback.print_exc()
 
 
 def get_overview(stock_code):

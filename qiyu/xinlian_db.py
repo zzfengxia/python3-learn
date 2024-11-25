@@ -1,16 +1,5 @@
 import db_connect
 
-# 查询普通租户
-newlink_db_name_sql = """
-    SELECT
-        t.`SCHEMA_NAME`
-    FROM
-        information_schema.`SCHEMATA` t 
-    WHERE
-        SUBSTR( t.`SCHEMA_NAME`, 1, 7 ) = 'newlink' 
-        AND SUBSTR( t.`SCHEMA_NAME`, 1, 8 ) != 'newlink_'
-"""
-
 # 查询服务商租户
 qiyuan_sp_db_name_sql = """
     SELECT
@@ -160,28 +149,49 @@ def update(sql, db_list):
         print("-" * 100)
         print("\n\n")
 
+def create(sql, db_list):
+    """
+    更新
+    :return:
+    """
+
+    for db_name in db_list:
+        print("-" * 45, db_name, "-" * 45)
+        line = sql.strip()
+        if line and line != '':
+            row_num = executor_from_tenant(line, db_name)
+            if row_num is not None:
+                print(f"更新行数：${row_num}")
+        print("-" * 100)
+        print("\n\n")
 
 db_config = 'D:\\qiyu-work\\mysql_connect_conf.yaml'
 prefix = 'newlink_uat'
+database_prefix = 'newlink'
 # prefix = 'local'
 
-def bubble_sort(arr):
-    n = len(arr)
-    for i in range(n - 1):
-        for j in range(n - i - 1):
-            if arr[j] > arr[j + 1]:
-                arr[j], arr[j + 1] = arr[j + 1], arr[j]
-    return arr  # 测试代码 arr = [64, 34, 25, 12, 22, 11, 90] sorted_arr = bubble_sort(arr) print(sorted_arr)
+# 查询普通租户
+newlink_db_name_sql = f"""
+    SELECT
+        t.`SCHEMA_NAME`
+    FROM
+        information_schema.`SCHEMATA` t 
+    WHERE
+        SUBSTR( t.`SCHEMA_NAME`, 1, {len(database_prefix)} ) = '{database_prefix}' 
+        AND SUBSTR( t.`SCHEMA_NAME`, 1, {len(database_prefix) + 1} ) != '{database_prefix}_' 
+"""
 
 if __name__ == '__main__':
     query_sql = """
     #
     #         """
     # # upt_sql = "update le_live_report_custom_field set field_desc = '在统计时间内，新增关注数-取消关注数' where field_code = 'sph_fans_add_num'"
-    # upt_sql = """
-    #          ALTER TABLE `dy_account` ADD COLUMN `ai_marketing_status` tinyint(1) NULL COMMENT 'AI营销状态 1:生效中 9:已过期' AFTER `residue_ai_speech`,ADD COLUMN `ai_marketing_start_time` datetime NULL COMMENT 'AI营销生效日期' AFTER `ai_marketing_status`,ADD COLUMN `ai_marketing_end_time` datetime NULL COMMENT 'AI营销到期日期' AFTER `ai_marketing_start_time`
-    #          """
+    upt_sql = """
+        ALTER TABLE `sph_video` DROP INDEX `idx_video_id`, ADD UNIQUE INDEX `idx_video_id`(`tenant_id`, `video_id`, `is_deleted`) USING BTREE
+        ALTER TABLE `sph_account` DROP INDEX `idx_nick_name`, ADD INDEX `idx_nick_name`(`nick_name`) USING BTREE
+        """
     # # # newlink_db_name_sql
-    # db_list = get_db_list(newlink_db_name_sql)
-    # update(upt_sql, db_list)
+    db_list = get_db_list(newlink_db_name_sql)
+    update(upt_sql, db_list)
+    #create(upt_sql, db_list)
     # select(query_sql, db_list)

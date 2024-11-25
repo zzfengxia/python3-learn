@@ -1,4 +1,4 @@
-name: base
+name: daily
 channels:
   - defaults
 dependencies:
@@ -15,12 +15,13 @@ dependencies:
   - backports.weakref=1.0.post1=py_1
   - blas=1.0=mkl
   - boltons=23.0.0=py310haa95532_0
-  - bottleneck=1.3.5=py310h9128911_0
+  - bottleneck=1.3.7=py310h9128911_0
   - brotli=1.0.9=h2bbff1b_7
   - brotli-bin=1.0.9=h2bbff1b_7
   - brotli-python=1.0.9=py310hd77b12b_7
   - bzip2=1.0.8=he774522_0
   - ca-certificates=2023.12.12=haa95532_0
+  - certifi=2024.2.2=py310haa95532_0
   - cffi=1.16.0=py310h2bbff1b_0
   - chardet=4.0.0=py310haa95532_1003
   - click=8.1.7=py310haa95532_0
@@ -39,7 +40,7 @@ dependencies:
   - conda-verify=3.4.2=py_1
   - console_shortcut=0.1.1=4
   - contourpy=1.2.0=py310h59b6b97_0
-  - cryptography=41.0.7=py310h89fc84f_0
+  - cryptography=39.0.1=py310h21b164f_2
   - defusedxml=0.7.1=pyhd3eb1b0_0
   - distro=1.8.0=py310haa95532_0
   - filelock=3.13.1=py310haa95532_0
@@ -87,7 +88,6 @@ dependencies:
   - lz4-c=1.9.4=h2bbff1b_0
   - m2-msys2-runtime=2.5.0.17080.65c939c=3
   - m2-patch=2.7.5=2
-  - matplotlib-base=3.8.0=py310h4ed8f06_0
   - menuinst=2.0.2=py310hd77b12b_0
   - mkl=2023.1.0=h6b88ed4_46358
   - mkl-service=2.4.0=py310h2bbff1b_1
@@ -99,11 +99,11 @@ dependencies:
   - navigator-updater=0.4.0=py310haa95532_1
   - nbformat=5.9.2=py310haa95532_0
   - numexpr=2.8.7=py310h2cd9be0_0
-  - numpy-base=1.26.3=py310h65a83cf_0
   - openjpeg=2.4.0=h4fc8c34_0
   - openssl=3.0.13=h2bbff1b_0
   - pathlib=1.0.1=pyhd3eb1b0_1
   - pcre2=10.42=h0ff8eda_0
+  - pillow=10.2.0=py310h2bbff1b_0
   - pip=22.3.1=py310haa95532_0
   - pkce=1.0.3=py310haa95532_0
   - pkginfo=1.9.6=py310haa95532_0
@@ -127,7 +127,6 @@ dependencies:
   - python-dotenv=0.21.0=py310haa95532_0
   - python-fastjsonschema=2.16.2=py310haa95532_0
   - python-libarchive-c=2.9=pyhd3eb1b0_1
-  - python-tzdata=2023.3=pyhd3eb1b0_0
   - pywin32=305=py310h2bbff1b_0
   - pywin32-ctypes=0.2.0=py310haa95532_1000
   - pyyaml=6.0.1=py310h2bbff1b_0
@@ -170,35 +169,29 @@ dependencies:
   - zstandard=0.19.0=py310h2bbff1b_0
   - zstd=1.5.5=hd43e919_0
   - pip:
-      - baostock==0.8.8
       - beautifulsoup4==4.12.3
       - bs4==0.0.2
-      - certifi==2024.2.2
       - charset-normalizer==3.3.2
       - cycler==0.12.1
+      - fake-useragent==1.4.0
       - fonttools==4.47.2
-      - func-timeout==4.3.5
       - idna==3.6
-      - jieba==0.42.1
       - jsonpath==0.82.2
       - kiwisolver==1.4.5
       - lxml==5.1.0
       - markupsafe==2.1.5
       - matplotlib==3.8.2
-      - multitasking==0.0.11
       - numpy==1.26.4
       - packaging==23.2
       - pandas==2.2.0
       - patsy==0.5.6
-      - pillow==10.2.0
       - plotly==5.18.0
-      - plotly-express==0.4.1
       - prettytable==3.9.0
-      - py-mini-racer==0.6.0
+      - pydash==7.0.7
       - pyecharts==2.0.4
-      - pyexecjs==1.5.1
       - pyparsing==3.1.1
       - pytz==2024.1
+      - pywencai==0.12.2
       - qstock==1.3.6
       - scipy==1.12.0
       - seaborn==0.13.2
@@ -210,5 +203,4 @@ dependencies:
       - tzdata==2023.4
       - urllib3==2.2.0
       - wcwidth==0.2.13
-      - websocket-client==0.57.0
-prefix: D:\soft20230329\anaconda
+prefix: D:\soft20230329\anaconda\envs\daily
