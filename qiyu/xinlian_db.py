@@ -187,9 +187,8 @@ if __name__ == '__main__':
     #         """
     # # upt_sql = "update le_live_report_custom_field set field_desc = '在统计时间内，新增关注数-取消关注数' where field_code = 'sph_fans_add_num'"
     upt_sql = """
-        ALTER TABLE `sph_video` DROP INDEX `idx_video_id`, ADD UNIQUE INDEX `idx_video_id`(`tenant_id`, `video_id`, `is_deleted`) USING BTREE
-        ALTER TABLE `sph_account` DROP INDEX `idx_nick_name`, ADD INDEX `idx_nick_name`(`nick_name`) USING BTREE
-        """
+        ALTER TABLE `sp_cont_contract_marketing` ADD COLUMN `ka_cooperation_fee_ratio` decimal(10, 2) NULL DEFAULT 0 COMMENT 'KA合作费比例' AFTER `is_deleted`, ADD COLUMN `sales_commission_rate` decimal(10, 2) NULL DEFAULT 0 COMMENT '销售实际提成比例' AFTER `ka_cooperation_fee_ratio`, ADD COLUMN `presale_commission_ratio` decimal(10, 2) NULL DEFAULT 0 COMMENT '售前提成比例' AFTER `sales_commission_rate`;
+    """
     # # # newlink_db_name_sql
     db_list = get_db_list(newlink_db_name_sql)
     update(upt_sql, db_list)
