@@ -34,16 +34,16 @@ class DoubleColorBall(object):
         data = self.bs.find_all(class_='hgt')
         return self.parse_ball(data)
 
-    def get_all(self):
+    def get_all(self, start_year=2003):
         lastYear = datetime.now().year
-        for year in range(2003, lastYear + 1):
+        for year in range(start_year, lastYear + 1):
             url = self.baseUrl + '?kj_year=%s' % (year,)
             print(url)
             html = self.get_html(url)
             self.bs = bs4.BeautifulSoup(html, 'html.parser')
             if self.bs:
                 data = self.bs.find_all(class_='hgt')
-                self.save_ball(self.parse_ball(data))
+                self.save_ball_overwrite(self.parse_ball(data))
 
     def parse_ball(self, data):
         """
@@ -72,6 +72,38 @@ class DoubleColorBall(object):
             for r in sorted(data, reverse=False):  # 升序，最新的数据写在文件最后
                 # for r in sorted(data, reverse=True):  #降序
                 f.write(str(r) + ' ' + ' '.join(data[r]) + '\n')
+
+    def save_ball_overwrite(self, new_data):
+        """
+        加载文件已有数据，并去重，重新写入
+        :param new_data:
+        :return:
+        """
+        # 加载已有数据
+        existing_data = {}
+        if os.path.exists(self.dataFile):
+            with open(self.dataFile, 'r') as f:
+                for line in f:
+                    line = line.strip()
+                    if line:
+                        parts = line.split(" ", maxsplit=1)
+                        existing_data[parts[0]] = parts[1]
+
+        # 合并数据（新数据覆盖旧数据）
+        add_data_size = 0
+        for k, v in new_data.items():
+            if k not in existing_data:
+                existing_data[k] = ' '.join(v)
+                add_data_size += 1
+
+        # 按期号升序排序
+        sorted_items = sorted(existing_data.items(), key=lambda x: x[0])
+
+        # 重写文件
+        with open(self.dataFile, 'w') as f:
+            for period, content in sorted_items:
+                f.write(f"{period} {content}\n")
+        print(f"所有数据拉取完成，更新{add_data_size}条数据")
 
     # 从数据文件中加载最新10条数据
     def load_last10(self):
@@ -119,3 +151,4 @@ class DoubleColorBall(object):
 if __name__ == '__main__':
     ball = DoubleColorBall()
     ball.upt_data()
+    #ball.get_all(2025)

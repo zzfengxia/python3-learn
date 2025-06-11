@@ -179,6 +179,7 @@ newlink_db_name_sql = f"""
     WHERE
         SUBSTR( t.`SCHEMA_NAME`, 1, {len(database_prefix)} ) = '{database_prefix}' 
         AND SUBSTR( t.`SCHEMA_NAME`, 1, {len(database_prefix) + 1} ) != '{database_prefix}_' 
+        or SUBSTR( t.`SCHEMA_NAME`, 1, {len(database_prefix) + 2} ) = '{database_prefix}_s'
 """
 
 if __name__ == '__main__':
@@ -187,8 +188,8 @@ if __name__ == '__main__':
     #         """
     # # upt_sql = "update le_live_report_custom_field set field_desc = '在统计时间内，新增关注数-取消关注数' where field_code = 'sph_fans_add_num'"
     upt_sql = """
-        ALTER TABLE `sp_cont_contract_marketing` ADD COLUMN `ka_cooperation_fee_ratio` decimal(10, 2) NULL DEFAULT 0 COMMENT 'KA合作费比例' AFTER `is_deleted`, ADD COLUMN `sales_commission_rate` decimal(10, 2) NULL DEFAULT 0 COMMENT '销售实际提成比例' AFTER `ka_cooperation_fee_ratio`, ADD COLUMN `presale_commission_ratio` decimal(10, 2) NULL DEFAULT 0 COMMENT '售前提成比例' AFTER `sales_commission_rate`;
-    """
+       ALTER TABLE `cst_customer_user` MODIFY COLUMN `clue_source` tinyint(4) NULL COMMENT '线索渠道 1-广告线索(巨量广告) 5-经营线索(企业号) 8-车云店线索' AFTER `ai_live_status`
+       """
     # # # newlink_db_name_sql
     db_list = get_db_list(newlink_db_name_sql)
     update(upt_sql, db_list)
