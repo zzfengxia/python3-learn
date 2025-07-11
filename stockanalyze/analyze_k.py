@@ -133,4 +133,4 @@ if __name__ == '__main__':
     #print(f'共有{len(analyze.get_all_no_st_stocks())}只股票')
     #print(analyze.get_prev_trade_day("20250407"))
     #print(analyze.get_kline('300785', start_date="20250407").to_string())
-    analyze.scan_unfilled_gap('600570')
+    analyze.scan_unfilled_gap('300068')
