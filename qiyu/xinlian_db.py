@@ -183,13 +183,10 @@ newlink_db_name_sql = f"""
 """
 
 if __name__ == '__main__':
-    query_sql = """
-    #
-    #         """
-    # # upt_sql = "update le_live_report_custom_field set field_desc = '在统计时间内，新增关注数-取消关注数' where field_code = 'sph_fans_add_num'"
     upt_sql = """
-       ALTER TABLE `cst_customer_user` MODIFY COLUMN `clue_source` tinyint(4) NULL COMMENT '线索渠道 1-广告线索(巨量广告) 5-经营线索(企业号) 8-车云店线索' AFTER `ai_live_status`
-       """
+ALTER TABLE `le_live_review` ADD COLUMN `ge_mini_finish_time` datetime(0) NULL DEFAULT NULL COMMENT 'geMini复盘完成时间' AFTER `ge_mini_review_time`,ADD COLUMN `ge_mini_taskid`varchar(128) DEFAULT NULL COMMENT 'geMini复盘任务id' AFTER `ge_mini_result`,ADD COLUMN `image_task_status`int(11) DEFAULT NULL COMMENT '画面截图任务状态' AFTER `ge_mini_taskid`;
+    
+    """
     # # # newlink_db_name_sql
     db_list = get_db_list(newlink_db_name_sql)
     update(upt_sql, db_list)

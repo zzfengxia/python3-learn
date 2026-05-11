@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell($shortcut = \"C:\\\\ProgramData\\\\Microsoft\\\\Windows\\\\Start Menu\\\\Programs\\\\Anaconda\\\\Anaconda Prompt \\(anaconda\\).lnk\"; if \\(Test-Path $shortcut\\) { $sh = New-Object -ComObject WScript.Shell; $lnk = $sh.CreateShortcut\\($shortcut\\); Write-Output \"Target: $\\($lnk.TargetPath\\)\"; Write-Output \"Args: $\\($lnk.Arguments\\)\"; Write-Output \"WorkDir: $\\($lnk.WorkingDirectory\\)\" } else { Get-ChildItem \"C:\\\\ProgramData\\\\Microsoft\\\\Windows\\\\Start Menu\\\\Programs\\\\Anaconda\" | Select-Object Name })",
+      "PowerShell(& \"D:\\\\soft202502\\\\anaconda\\\\Scripts\\\\conda.exe\" env export -n daily --no-builds --from-history)",
+      "Bash(\"C:/Users/zzfen/.conda/envs/daily/python.exe\" \"D:/mycode/python3-learn/dailytool/fix_dialog_excel.py\")"
+    ]
+  }
+}
